@@ -1,0 +1,32 @@
+﻿  MemoryProcess.cpp
+C:\james\dll\Process\Process\MemoryProcess.cpp(68,5): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
+C:\james\dll\Process\Process\MemoryProcess.cpp(68,5): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+C:\james\dll\Process\Process\MemoryProcess.cpp(71,36): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
+C:\james\dll\Process\Process\MemoryProcess.cpp(71,36): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+C:\james\dll\Process\Process\MemoryProcess.cpp(72,56): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
+C:\james\dll\Process\Process\MemoryProcess.cpp(72,56): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+C:\james\dll\Process\Process\MemoryProcess.cpp(82,10): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
+C:\james\dll\Process\Process\MemoryProcess.cpp(82,10): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+C:\james\dll\Process\Process\MemoryProcess.cpp(85,36): warning C4311: '類型轉換': 指標值由 'HANDLE' 指派至 'int' 時會遭截斷
+C:\james\dll\Process\Process\MemoryProcess.cpp(85,36): warning C4302: '類型轉換': 從 'HANDLE' 轉換為 'int'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+C:\james\dll\Process\Process\MemoryProcess.cpp(1037,26): warning C4311: '類型轉換': 指標值由 'PBYTE' 指派至 'DWORD' 時會遭截斷
+C:\james\dll\Process\Process\MemoryProcess.cpp(1037,26): warning C4302: '類型轉換': 從 'PBYTE' 轉換為 'DWORD'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+C:\james\dll\Process\Process\MemoryProcess.cpp(1046,89): warning C4311: '類型轉換': 指標值由 'PIMAGE_DOS_HEADER' 指派至 'DWORD' 時會遭截斷
+C:\james\dll\Process\Process\MemoryProcess.cpp(1046,89): warning C4302: '類型轉換': 從 'PIMAGE_DOS_HEADER' 轉換為 'DWORD'，是由較大的類型轉換為較小的類型，可能導致資料遺失
+C:\james\dll\Process\Process\MemoryProcess.cpp(1046,90): warning C4312: '類型轉換': 將 'unsigned long' 轉換為較大的 'PIMAGE_NT_HEADERS32'
+C:\james\dll\Process\Process\MemoryProcess.cpp(1061,78): warning C4312: '類型轉換': 將 'unsigned long' 轉換為較大的 'PIMAGE_EXPORT_DIRECTORY'
+C:\james\dll\Process\Process\MemoryProcess.cpp(1064,78): warning C4312: '類型轉換': 將 'unsigned long' 轉換為較大的 'PWORD'
+C:\james\dll\Process\Process\MemoryProcess.cpp(1065,73): warning C4312: '類型轉換': 將 'unsigned long' 轉換為較大的 'PDWORD'
+C:\james\dll\Process\Process\MemoryProcess.cpp(1081,88): warning C4312: '類型轉換': 將 'unsigned long' 轉換為較大的 'PDWORD'
+C:\james\dll\Process\Process\MemoryProcess.cpp(1082,69): warning C4312: '類型轉換': 將 'unsigned long' 轉換為較大的 'PCHAR'
+  Process.cpp
+C:\james\dll\Process\Process\Process.cpp(46,13): warning C4477: 'wprintf' : 格式字串 '%lu' 需要 'unsigned long' 類型的引數，但 variadic 引數 1 的類型為 'time_t'
+C:\james\dll\Process\Process\Process.cpp(46,13): message : 請考慮在格式字串中使用 '%llu'
+C:\james\dll\Process\Process\Process.cpp(46,13): message : 請考慮在格式字串中使用 '%Iu'
+C:\james\dll\Process\Process\Process.cpp(46,13): message : 請考慮在格式字串中使用 '%I64u'
+  正在產生程式碼
+  4 of 1128 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
+    6 functions had inline decision re-evaluated but remain unchanged
+  已完成程式碼產生
+  Process.vcxproj -> C:\james\dll\Process\x64\Release\Process.exe
