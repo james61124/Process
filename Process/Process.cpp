@@ -48,6 +48,10 @@ int main()
 				wprintf(L"user_name: %s\n", it->second.user_name.c_str());
 				wprintf(L"DigitalSignature: %s\n", it->second.DigitalSignature.c_str());
 				wprintf(L"parent_pid: %lu\n", it->second.parent_pid);
+
+				wprintf(L"ParentPath: %s\n", it->second.ParentPath);
+				wprintf(L"ParentProcessName: %s\n", it->second.ParentProcessName.c_str());
+				
 				wprintf(L"ProcessHash: %s\n", it->second.ProcessHash);
 				wprintf(L"Injection: %s\n", it->second.Injection.c_str());
 				wprintf(L"Injected: %d\n", it->second.Injected);

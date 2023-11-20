@@ -606,6 +606,48 @@ void GetProcessInfo(DWORD pid,process_info & pInfo)
 
 	// IsWindowsProcessNormal
 
+	// parent path
+	GetProcessPath(pInfo.parent_pid, pInfo.ParentPath, true, NULL, NULL);
+
+	// parent process name
+	NTSTATUS status;
+	PVOID buffer;
+	PSYSTEM_PROCESS_INFO spi;
+	buffer = VirtualAlloc(NULL, 1024 * 1024, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE); // We need to allocate a large buffer because the process list can be large.
+	if (buffer) {
+		spi = (PSYSTEM_PROCESS_INFO)buffer;
+#if defined _M_X64
+		if (!NT_SUCCESS(status = NtQuerySystemInformation(SystemProcessInformation, spi, 1024 * 1024, NULL))) VirtualFree(buffer, 0, MEM_RELEASE);
+		else {
+			while (spi->NextEntryOffset) // Loop over the list until we reach the last entry.
+			{
+				if ((int)spi->ProcessId > 0 && (int)spi->ProcessId == pInfo.parent_pid) {
+					pInfo.ParentProcessName = spi->ImageName.Buffer;
+				}
+				spi = (PSYSTEM_PROCESS_INFO)((LPBYTE)spi + spi->NextEntryOffset); // Calculate the address of the next entry.
+			}
+		}
+#elif defined _M_IX86
+		pZwQuerySystemInformation ZwQuerySystemInformation = (pZwQuerySystemInformation)GetProcAddress(GetModuleHandle(L"ntdll.dll"), "ZwQuerySystemInformation");
+		if (!NT_SUCCESS(status = ZwQuerySystemInformation(SystemProcessInformation, spi, 1024 * 1024, NULL)))
+		{
+			VirtualFree(buffer, 0, MEM_RELEASE);
+		}
+		else {
+			while (spi->NextEntryOffset) // Loop over the list until we reach the last entry.
+			{
+				if ((int)spi->ProcessId == pInfo.parent_pid) pInfo.ParentProcessName = spi->ImageName.Buffer;
+				spi = (PSYSTEM_PROCESS_INFO)((LPBYTE)spi + spi->NextEntryOffset); // Calculate the address of the next entry.
+			}
+		}
+#endif
+		//time (&LoadProcessTime);
+		
+	}
+
+	
+
+
 	std::set<DWORD> m_ApiName;
 	LoadApiPattern(&m_ApiName);
 	set<DWORD> ApiStringHash;
@@ -697,6 +739,95 @@ void GetProcessInfo(DWORD pid,process_info & pInfo)
 		pInfo.Network += wideString + L"\n";
 	}
 
+}
+
+void GetProcessPath(DWORD pid, TCHAR* pPath, bool IsGetTime, TCHAR* pTimeStr, TCHAR* pCTimeStr)
+{
+	//HMODULE hModuleHandle;
+	//DWORD dwNeeded;
+	HANDLE processHandle = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, pid);
+	TCHAR* filename = new TCHAR[MAX_PATH_EX];
+	TCHAR* Longfilename = new TCHAR[MAX_PATH_EX];
+	TCHAR* m_FilePath = new TCHAR[MAX_PATH_EX];
+	if (processHandle != NULL)
+	{
+		//if (EnumProcessModules(processHandle, &hModuleHandle, sizeof(hModuleHandle), &dwNeeded) == TRUE)
+		//{
+		if (GetModuleFileNameEx(processHandle, NULL, filename, MAX_PATH_EX))
+		{
+			if (GetLongPathName(filename, Longfilename, MAX_PATH_EX))
+			{
+				lstrcpy(m_FilePath, Longfilename);
+			}
+			else
+			{
+				lstrcpy(m_FilePath, filename);
+			}
+
+			BOOL isrightPath = FALSE;
+			//MessageBox(0,m_FilePath,0,0);
+			for (size_t i = 0; i < wcslen(m_FilePath); i++)
+			{
+				if (m_FilePath[i] == ':')
+				{
+					isrightPath = TRUE;
+					if ((i - 1) != 0)
+						lstrcpy(pPath, m_FilePath + (i - 1));
+					else
+						lstrcpy(pPath, m_FilePath);
+					break;
+				}
+			}
+			if (!isrightPath)
+			{//MessageBox(0,m_FilePath,0,0);
+				lstrcpy(pPath, _T("null"));
+			}
+		}
+		else
+			lstrcpy(pPath, _T("null"));
+
+		if (IsGetTime)
+		{
+			FILETIME l1, l2, l3, l4;
+			if (GetProcessTimes(processHandle, &l1, &l2, &l3, &l4))
+			{
+				FILETIME localft;
+				FileTimeToLocalFileTime(&l1, &localft);
+				if (pCTimeStr != NULL)
+				{
+					time_t ProcessCreateTime = 0;
+					ProcessCreateTime = filetime_to_timet(l1);
+					swprintf_s(pCTimeStr, 20, _T("%lld"), ProcessCreateTime);
+				}
+				if (pTimeStr != NULL)
+				{
+					SYSTEMTIME st;
+					FileTimeToSystemTime(&localft, &st);
+					swprintf_s(pTimeStr, 20, _T("%4d/%02d/%02d %02d:%02d:%02d"), st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond);
+				}
+			}
+			else
+				lstrcpy(pTimeStr, _T("null"));
+		}
+		//}
+		//else
+			//lstrcpy(pPath,_T("null"));
+		CloseHandle(processHandle);
+	}
+	else
+		lstrcpy(pPath, _T("null"));
+	delete[] m_FilePath;
+	delete[] Longfilename;
+	delete[] filename;
+}
+
+time_t filetime_to_timet(const FILETIME& ft)
+{
+	ULARGE_INTEGER ull;
+	ull.LowPart = ft.dwLowDateTime;
+	ull.HighPart = ft.dwHighDateTime;
+
+	return ull.QuadPart / 10000000ULL - 11644473600ULL;
 }
 
 char* Convert2State(DWORD dwState)

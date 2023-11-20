@@ -44,6 +44,8 @@ struct process_info
 
 	
 	wchar_t ProcessHash[40];
+	wchar_t ParentPath[MAX_PATH_EX];
+	wstring ParentProcessName;
 	BOOL InjectionOther;
 	BOOL InjectionPE;
 	BOOL Injected;
@@ -160,6 +162,8 @@ char* GetOSVersion();
 void GetTcpInformationXPEx(vector<TCPInformation>* pInfo);
 void GetTcpInformationEx(vector<TCPInformation>* pInfo);
 char* Convert2State(DWORD dwState);
+void GetProcessPath(DWORD pid, TCHAR* pPath, bool IsGetTime, TCHAR* pTimeStr, TCHAR* pCTimeStr);
+time_t filetime_to_timet(const FILETIME& ft);
 //void SearchExecutePath(DWORD pid,wstring & pPath,TCHAR* pName);
 
 
